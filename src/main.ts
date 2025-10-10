@@ -6,10 +6,14 @@ import "./style.css";
 */
 
 let counter: number = 0;
+const ratePerSec: number = 1; // 60fps
 
 document.body.innerHTML = `
   <h1>💞 Total Love Sent: <span id="counter">0</span></h1>
   <button id="button"></button>
+  <p>^ Click the button to send love arrows!</p>
+  <button id="autoClickBtn">💓 Rapid Fire</button>
+  <p>(or let it autoclick for you)</p>
 `;
 
 const cupidBtn = document.getElementById("button")!;
@@ -25,7 +29,22 @@ button.addEventListener("click", () => {
 });
 
 // Auto Click Handler
-setInterval(() => {
-  counter++;
-  counterElement.textContent = counter.toString();
-}, 1000);
+const autoClickBtn = document.getElementById("autoClickBtn")!;
+
+autoClickBtn.addEventListener("click", () => {
+  requestAnimationFrame(autoClick);
+});
+
+// request animationFrame
+let timeOfLastFrame = performance.now();
+
+function autoClick(currentTime: number) {
+  const deltaTime = (currentTime - timeOfLastFrame) / 1000; // Convert to seconds
+  timeOfLastFrame = currentTime;
+
+  const clicksThisFrame = ratePerSec * deltaTime;
+  counter += clicksThisFrame;
+  counterElement.textContent = Math.floor(counter).toString();
+
+  requestAnimationFrame(autoClick);
+}
