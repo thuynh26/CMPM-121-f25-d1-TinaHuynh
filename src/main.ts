@@ -23,3 +23,9 @@ button.addEventListener("click", () => {
   counter++;
   counterElement.textContent = counter.toString();
 });
+
+// Auto Click Handler
+setInterval(() => {
+  counter++;
+  counterElement.textContent = counter.toString();
+}, 1000);
