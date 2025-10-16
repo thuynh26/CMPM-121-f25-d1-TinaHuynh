@@ -5,6 +5,8 @@ import "./style.css";
 <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
 */
 
+import "./style.css";
+
 // ==================== Game State ==================== //
 let counter: number = 0;
 let growthRate: number = 0;
@@ -21,20 +23,19 @@ let ownC: number = 0;
 
 // ==================== DOM ==================== //
 document.body.innerHTML = `
-  <h1>💞 Total Love Sent: <span id="counter">0</span></h1>
-  <button id="clickBtn">🏹 Shoot Arrow</button>
+  <h1 class="red-text">💞 Total Love Sent: <span id="counter">0</span></h1>
+  <button id="clickBtn">🏹 Shoot Love Arrow</button>
+  <p class="red-text">^ Click the button to send love arrows!</p>
 
-  <p>^ Click the button to send love arrows!</p>
-
-  <p>Purchase unit upgrades!</p>
+  <h2 class="red-text">✨ Purchase blessing upgrades! ✨</h2>
   <div id="upgradeShop">
-    <button id="BtnA">💓 Upgrade A</button>
-    <button id="BtnB">💓 Upgrade B</button>
-    <button id="BtnC">💓 Upgrade C</button>
+    <button id="BtnA">🕊️ Love Dove</button>
+    <button id="BtnB">❤️‍🔥 Rapid Fire</button>
+    <button id="BtnC">👼🎶 Cherub Choir</button>
   </div>
 
-  <p id="itemSummary">Items Purchased: </p>
-  <p id="rate">Growth Rate: </p>
+  <p id="itemSummary" class="red-text">Blessings Purchased: </p>
+  <p id="rate" class="red-text">Love Rate: </p>
 
 `;
 
@@ -59,10 +60,10 @@ function updateCounter() {
 }
 
 function updateItemSummary() {
-  rateElement.textContent = `Growth Rate: ${growthRate.toFixed(2)} per second`;
+  rateElement.textContent = `Love Rate: ${growthRate.toFixed(2)} per second`;
 
   itemSumElement.textContent =
-    `Items Purchased: A(${ownA}), B(${ownB}), C(${ownC})`;
+    `Blessings Purchased: 🕊️(${ownA}) | ❤️‍🔥(${ownB}) | 👼🎶(${ownC})`;
 }
 
 function canAfford(cost: number): boolean {
@@ -70,9 +71,17 @@ function canAfford(cost: number): boolean {
 }
 
 function updateButtons() {
-  upgradeBtnA.textContent = `💓 Upgrade A (Cost: ${currentCost(A_COST, ownA)})`;
-  upgradeBtnB.textContent = `💓 Upgrade B (Cost: ${currentCost(B_COST, ownB)})`;
-  upgradeBtnC.textContent = `💓 Upgrade C (Cost: ${currentCost(C_COST, ownC)})`;
+  upgradeBtnA.textContent = `🕊️ Love Dove (Cost: ${currentCost(A_COST, ownA)})`;
+  upgradeBtnB.textContent = `❤️‍🔥 Rapid Fire (Cost: ${
+    currentCost(B_COST, ownB)
+  })`;
+  upgradeBtnC.textContent = `👼🎶 Cherub Choir (Cost: ${
+    currentCost(C_COST, ownC)
+  })`;
+
+  upgradeBtnA.disabled = !canAfford(currentCost(A_COST, ownA));
+  upgradeBtnB.disabled = !canAfford(currentCost(B_COST, ownB));
+  upgradeBtnC.disabled = !canAfford(currentCost(C_COST, ownC));
 }
 
 function refreshUI() {
