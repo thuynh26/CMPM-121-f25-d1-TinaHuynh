@@ -24,14 +24,14 @@ let ownC: number = 0;
 // ==================== DOM ==================== //
 document.body.innerHTML = `
   <h1 class="red-text">💞 Total Love Sent: <span id="counter">0</span></h1>
-  <button id="clickBtn">🏹 Shoot Love Arrow</button>
+  <button id="clickBtn" class="btn-style">🏹 Shoot Love Arrow</button>
   <p class="red-text">^ Click the button to send love arrows!</p>
 
   <h2 class="red-text">✨ Purchase blessing upgrades! ✨</h2>
   <div id="upgradeShop">
-    <button id="BtnA">🕊️ Love Dove</button>
-    <button id="BtnB">❤️‍🔥 Rapid Fire</button>
-    <button id="BtnC">👼🎶 Cherub Choir</button>
+    <button id="BtnA" class="btn-style">🕊️ Love Dove</button>
+    <button id="BtnB" class="btn-style">❤️‍🔥 Rapid Fire</button>
+    <button id="BtnC" class="btn-style">👼🎶 Cherub Choir</button>
   </div>
 
   <p id="itemSummary" class="red-text">Blessings Purchased: </p>

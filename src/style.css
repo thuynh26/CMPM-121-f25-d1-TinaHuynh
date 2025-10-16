@@ -14,9 +14,18 @@
 }
 
 body {
+  margin-top: 100px;
+  text-align: center;
   background-color: #fff9f5;
 }
 
 .red-text {
   color: #be0822;
+}
+
+.btn-style {
+  background: #efaab0;
+  color: #be0822;
+  size: 20px;
+  padding: 16px;
 }
