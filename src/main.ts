@@ -5,115 +5,117 @@ import "./style.css";
 <p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
 */
 
-// =============== Game State =============== //
-let counter: number = 0;
-
+// ==================== Game State ==================== //
+let counter: number = 100;
 let growthRate: number = 0;
 // Initial growth rate -> +1 a purchase is made
 
-const upgradeCost: number = 10;
+const A_COST: number = 10;
+const B_COST: number = 100;
+const C_COST: number = 1000;
+const A_RATE = 0.1, B_RATE = 2.0, C_RATE = 50;
 
-// =============== DOM =============== //
+let ownA: number = 0;
+let ownB: number = 0;
+let ownC: number = 0;
+
+// ==================== DOM ==================== //
 document.body.innerHTML = `
   <h1>💞 Total Love Sent: <span id="counter">0</span></h1>
   <button id="clickBtn">🏹 Shoot Arrow</button>
 
   <p>^ Click the button to send love arrows!</p>
 
+  <p>Purchase unit upgrades!</p>
   <div id="upgradeShop">
-    <button id="upgradeBtnA">💓 Rapid Fire</button>
+    <button id="upgradeBtnA">💓 Upgrade A</button>
     <button id="upgradeBtnB">💓 Upgrade B</button>
     <button id="upgradeBtnC">💓 Upgrade C</button>
   </div>
 
-  <p>Purchase unit upgrades!</p>
+  <p id="itemSummary">Items Purchased: </p>
+  <p id="rate">Growth Rate: </p>
 
 `;
 
-// =============== DOM ref =============== //
+// ==================== DOM ref ==================== //
 const counterElement = document.getElementById("counter")!;
 const clickBtn = document.getElementById("clickBtn")!;
 const upgradeBtnA = document.getElementById("upgradeBtnA")!;
 const upgradeBtnB = document.getElementById("upgradeBtnB")!;
 const upgradeBtnC = document.getElementById("upgradeBtnC")!;
+const itemSumElement = document.getElementById("itemSummary")!;
 
-// =============== Helper Functions =============== //
+const rateElement = document.getElementById("rate")!;
+
+// ==================== Helper Functions ==================== //
 function updateCounter() {
   counterElement.textContent = counter.toString();
+  counterElement.title = counter.toFixed(5);
 }
 
-// =============== Button Handlers =============== //
-clickBtn.addEventListener("click", () => {
-  counter++;
-  updateCounter();
-});
+function updateItemSummary() {
+  rateElement.textContent = `Growth Rate: ${growthRate.toFixed(2)} per second`;
 
-// Auto clicker using reqAnimationFrame
+  itemSumElement.textContent =
+    `Items Purchased: A(${ownA}), B(${ownB}), C(${ownC})`;
+}
+
+function canAfford(cost: number): boolean {
+  return counter >= cost;
+}
+
+// ==================== RAF Functions ====================//
 let timeOfLastFrame = performance.now();
-let loopStarted = false;
 
 function autoClick(currentTime: number) {
   const deltaTime = (currentTime - timeOfLastFrame) / 1000;
   timeOfLastFrame = currentTime;
 
-  const clicksThisFrame = growthRate * deltaTime;
-  counter += clicksThisFrame;
-  counterElement.textContent = Math.floor(counter).toString();
+  counter += growthRate * deltaTime;
+  updateCounter();
 
   requestAnimationFrame(autoClick);
 }
 
-// Upgrade Handler
+// ==================== Button Handlers ==================== //
+clickBtn.addEventListener("click", () => {
+  counter++;
+  updateCounter();
+});
+
 upgradeBtnA.addEventListener("click", () => {
-  if (counter >= upgradeCost) {
-    counter -= upgradeCost;
-    growthRate++;
-
-    if (!loopStarted) {
-      loopStarted = true;
-      requestAnimationFrame((t) => {
-        timeOfLastFrame = t;
-        requestAnimationFrame(autoClick);
-      });
-    }
-
-    updateCounter();
-    upgradeBtnA.textContent = `💓 Rapid Fire (Currently +${growthRate}/sec)`;
+  if (canAfford(A_COST)) {
+    counter -= A_COST;
+    growthRate += A_RATE;
+    ownA++;
+    timeOfLastFrame = performance.now();
+    requestAnimationFrame(autoClick);
   }
+  updateCounter();
+  updateItemSummary();
 });
 
 upgradeBtnB.addEventListener("click", () => {
-  if (counter >= 100) {
-    counter -= 100;
-    growthRate++;
-
-    if (!loopStarted) {
-      loopStarted = true;
-      requestAnimationFrame((t) => {
-        timeOfLastFrame = t;
-        requestAnimationFrame(autoClick);
-      });
-    }
-
-    counterElement.textContent = Math.floor(counter).toString();
-    upgradeBtnA.textContent = `💓 Upgrade B (Currently +${growthRate}/sec)`;
+  if (canAfford(B_COST)) {
+    counter -= B_COST;
+    growthRate += B_RATE;
+    ownB++;
+    timeOfLastFrame = performance.now();
+    requestAnimationFrame(autoClick);
   }
+  updateCounter();
+  updateItemSummary();
 });
 
 upgradeBtnC.addEventListener("click", () => {
-  if (counter >= 1000) {
-    counter -= 1000;
-    growthRate++;
-
-    if (!loopStarted) {
-      loopStarted = true;
-      requestAnimationFrame((t) => {
-        timeOfLastFrame = t;
-        requestAnimationFrame(autoClick);
-      });
-    }
-
-    counterElement.textContent = Math.floor(counter).toString();
-    upgradeBtnA.textContent = `💓 Upgrade C (Currently +${growthRate}/sec)`;
+  if (canAfford(C_COST)) {
+    counter -= C_COST;
+    growthRate += C_RATE;
+    ownC++;
+    timeOfLastFrame = performance.now();
+    requestAnimationFrame(autoClick);
   }
+  updateCounter();
+  updateItemSummary();
 });
