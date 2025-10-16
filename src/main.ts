@@ -49,7 +49,7 @@ const rateElement = document.getElementById("rate")!;
 
 // ==================== Helper Functions ==================== //
 function currentCost(base: number, owned: number): number {
-  const newCost = (base * Math.pow(PRICE_INCREASE, owned));
+  const newCost = base * Math.pow(PRICE_INCREASE, owned);
   return parseFloat(newCost.toFixed(2));
 }
 
@@ -124,7 +124,7 @@ upgradeBtnA.addEventListener("click", () => {
 
 upgradeBtnB.addEventListener("click", () => {
   const cost = currentCost(B_COST, ownB);
-  if(canAfford(cost)) {
+  if (canAfford(cost)) {
     counter -= cost;
     growthRate += B_RATE;
     ownB++;
@@ -151,6 +151,6 @@ upgradeBtnC.addEventListener("click", () => {
 });
 
 // ==================== Init ==================== //
-  updateCounter();
-  updateItemSummary();
-  updateButtons();
+updateCounter();
+updateItemSummary();
+updateButtons();
