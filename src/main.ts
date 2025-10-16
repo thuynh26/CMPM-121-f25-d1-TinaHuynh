@@ -75,6 +75,12 @@ function updateButtons() {
   upgradeBtnC.textContent = `💓 Upgrade C (Cost: ${currentCost(C_COST, ownC)})`;
 }
 
+function refreshUI() {
+  updateCounter();
+  updateItemSummary();
+  updateButtons();
+}
+
 // ==================== RAF Functions ====================//
 let timeOfLastFrame = performance.now();
 let loopStarted = false;
@@ -103,9 +109,7 @@ function startLoopOnce() {
 // ==================== Button Handlers ==================== //
 clickBtn.addEventListener("click", () => {
   counter++;
-  updateCounter();
-  updateItemSummary();
-  updateButtons();
+  refreshUI();
 });
 
 upgradeBtnA.addEventListener("click", () => {
@@ -116,9 +120,7 @@ upgradeBtnA.addEventListener("click", () => {
     ownA++;
 
     startLoopOnce();
-    updateCounter();
-    updateItemSummary();
-    updateButtons();
+    refreshUI();
   }
 });
 
@@ -130,9 +132,7 @@ upgradeBtnB.addEventListener("click", () => {
     ownB++;
 
     startLoopOnce();
-    updateCounter();
-    updateItemSummary();
-    updateButtons();
+    refreshUI();
   }
 });
 
@@ -144,13 +144,9 @@ upgradeBtnC.addEventListener("click", () => {
     ownC++;
 
     startLoopOnce();
-    updateCounter();
-    updateItemSummary();
-    updateButtons();
+    refreshUI();
   }
 });
 
 // ==================== Init ==================== //
-updateCounter();
-updateItemSummary();
-updateButtons();
+refreshUI();
