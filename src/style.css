@@ -1,5 +1,22 @@
+/* 
+#e86975 - reddish pink
+#efaab0 - light pink
+#eed7c8 - light beige
+#fff9f5 - off white
+#be0822 - red
+#fd9898 - pink
+*/
+
 .icon {
   width: 64px;
   vertical-align: top;
   border: 1px solid salmon;
+}
+
+body {
+  background-color: #fff9f5;
+}
+
+.red-text {
+  color: #be0822;
 }
