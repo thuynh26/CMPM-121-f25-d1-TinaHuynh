@@ -6,9 +6,9 @@ import "./style.css";
 */
 
 // ==================== Game State ==================== //
-let counter: number = 100;
+let counter: number = 0;
 let growthRate: number = 0;
-// Initial growth rate -> +1 a purchase is made
+const PRICE_INCREASE: number = 1.15;
 
 const A_COST: number = 10;
 const B_COST: number = 100;
@@ -28,9 +28,9 @@ document.body.innerHTML = `
 
   <p>Purchase unit upgrades!</p>
   <div id="upgradeShop">
-    <button id="upgradeBtnA">💓 Upgrade A</button>
-    <button id="upgradeBtnB">💓 Upgrade B</button>
-    <button id="upgradeBtnC">💓 Upgrade C</button>
+    <button id="BtnA">💓 Upgrade A</button>
+    <button id="BtnB">💓 Upgrade B</button>
+    <button id="BtnC">💓 Upgrade C</button>
   </div>
 
   <p id="itemSummary">Items Purchased: </p>
@@ -41,16 +41,20 @@ document.body.innerHTML = `
 // ==================== DOM ref ==================== //
 const counterElement = document.getElementById("counter")!;
 const clickBtn = document.getElementById("clickBtn")!;
-const upgradeBtnA = document.getElementById("upgradeBtnA")!;
-const upgradeBtnB = document.getElementById("upgradeBtnB")!;
-const upgradeBtnC = document.getElementById("upgradeBtnC")!;
+const upgradeBtnA = document.getElementById("BtnA") as HTMLButtonElement;
+const upgradeBtnB = document.getElementById("BtnB") as HTMLButtonElement;
+const upgradeBtnC = document.getElementById("BtnC") as HTMLButtonElement;
 const itemSumElement = document.getElementById("itemSummary")!;
-
 const rateElement = document.getElementById("rate")!;
 
 // ==================== Helper Functions ==================== //
+function currentCost(base: number, owned: number): number {
+  const newCost = (base * Math.pow(PRICE_INCREASE, owned));
+  return parseFloat(newCost.toFixed(2));
+}
+
 function updateCounter() {
-  counterElement.textContent = counter.toString();
+  counterElement.textContent = Math.floor(counter).toString();
   counterElement.title = counter.toFixed(5);
 }
 
@@ -65,8 +69,15 @@ function canAfford(cost: number): boolean {
   return counter >= cost;
 }
 
+function updateButtons() {
+  upgradeBtnA.textContent = `💓 Upgrade A (Cost: ${currentCost(A_COST, ownA)})`;
+  upgradeBtnB.textContent = `💓 Upgrade B (Cost: ${currentCost(B_COST, ownB)})`;
+  upgradeBtnC.textContent = `💓 Upgrade C (Cost: ${currentCost(C_COST, ownC)})`;
+}
+
 // ==================== RAF Functions ====================//
 let timeOfLastFrame = performance.now();
+let loopStarted = false;
 
 function autoClick(currentTime: number) {
   const deltaTime = (currentTime - timeOfLastFrame) / 1000;
@@ -74,48 +85,72 @@ function autoClick(currentTime: number) {
 
   counter += growthRate * deltaTime;
   updateCounter();
+  updateItemSummary();
+  updateButtons();
 
   requestAnimationFrame(autoClick);
+}
+
+function startLoopOnce() {
+  if (loopStarted) return;
+  loopStarted = true;
+  requestAnimationFrame((t) => {
+    timeOfLastFrame = t;
+    requestAnimationFrame(autoClick);
+  });
 }
 
 // ==================== Button Handlers ==================== //
 clickBtn.addEventListener("click", () => {
   counter++;
   updateCounter();
+  updateItemSummary();
+  updateButtons();
 });
 
 upgradeBtnA.addEventListener("click", () => {
-  if (canAfford(A_COST)) {
-    counter -= A_COST;
+  const cost = currentCost(A_COST, ownA);
+  if (canAfford(cost)) {
+    counter -= cost;
     growthRate += A_RATE;
     ownA++;
-    timeOfLastFrame = performance.now();
-    requestAnimationFrame(autoClick);
+
+    startLoopOnce();
+    updateCounter();
+    updateItemSummary();
+    updateButtons();
   }
-  updateCounter();
-  updateItemSummary();
 });
 
 upgradeBtnB.addEventListener("click", () => {
-  if (canAfford(B_COST)) {
-    counter -= B_COST;
+  const cost = currentCost(B_COST, ownB);
+  if(canAfford(cost)) {
+    counter -= cost;
     growthRate += B_RATE;
     ownB++;
-    timeOfLastFrame = performance.now();
-    requestAnimationFrame(autoClick);
+
+    startLoopOnce();
+    updateCounter();
+    updateItemSummary();
+    updateButtons();
   }
-  updateCounter();
-  updateItemSummary();
 });
 
 upgradeBtnC.addEventListener("click", () => {
-  if (canAfford(C_COST)) {
-    counter -= C_COST;
+  const cost = currentCost(C_COST, ownC);
+  if (canAfford(cost)) {
+    counter -= cost;
     growthRate += C_RATE;
     ownC++;
-    timeOfLastFrame = performance.now();
-    requestAnimationFrame(autoClick);
+
+    startLoopOnce();
+    updateCounter();
+    updateItemSummary();
+    updateButtons();
   }
+});
+
+// ==================== Init ==================== //
   updateCounter();
   updateItemSummary();
-});
+  updateButtons();
