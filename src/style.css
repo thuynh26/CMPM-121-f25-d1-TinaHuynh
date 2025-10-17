@@ -14,7 +14,7 @@
 }
 
 body {
-  margin-top: 100px;
+  margin-top: 10%;
   text-align: center;
   background-color: #fff9f5;
 }
@@ -23,17 +23,27 @@ body {
   color: #be0822;
 }
 
-.btn-style {
+.main-btn-style {
   background: #efaab0;
-  size: 20px;
-  padding: 16px;
+  padding: 20px;
   border: 2px solid #e86975;
-  border-radius: 30px;
-  font-size: 18px;
+  border-radius: 20px;
+  font-size: 25px;
   color: #be0822;
+}
+
+.shop-btn-style {
+  background: #fd9898;
+  padding: 12px;
+  border: 2px solid #e86975;
+  border-radius: 20px;
+  font-size: 16px;
+  color: #be0822;
+  margin: 8px;
 }
 
 button:disabled {
   background: rgb(179, 160, 160);
+  border: 2px solid #916b70;
   color: #5e554f;
 }

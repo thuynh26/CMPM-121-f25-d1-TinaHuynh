@@ -12,6 +12,7 @@ let counter: number = 0;
 let growthRate: number = 0;
 const PRICE_INCREASE: number = 1.15;
 
+// Remove hardcoded costs and rates after step 9 refactoring
 const A_COST: number = 10;
 const B_COST: number = 100;
 const C_COST: number = 1000;
@@ -21,17 +22,35 @@ let ownA: number = 0;
 let ownB: number = 0;
 let ownC: number = 0;
 
+interface upgradeItems {
+  name: string;
+  baseCost: number;
+  rate: number;
+  owned: number;
+}
+
+/* Step 9 refactor data structure
+const availableItems: upgradeItems[] = [
+  {name: "🕊️ Love Dove", baseCost: 10, rate: 0.1, owned: 0},
+  {name: "❤️‍🔥 Rapid Fire", baseCost: 100, rate: 2.0, owned: 0},
+  {name: "👼🎶 Cherub Choir", baseCost: 1000, rate: 50, owned: 0},
+  {name: "Upgrade 4", baseCost: 5000, rate: 200, owned: 0},
+  {name: "Upgrade 5", baseCost: 20000, rate: 1000, owned: 0}
+];
+*/
+
 // ==================== DOM ==================== //
 document.body.innerHTML = `
   <h1 class="red-text">💞 Total Love Sent: <span id="counter">0</span></h1>
-  <button id="clickBtn" class="btn-style">🏹 Shoot Love Arrow</button>
+  <button id="clickBtn" class="main-btn-style">🏹 Shoot Love Arrow</button>
   <p class="red-text">^ Click the button to send love arrows!</p>
 
   <h2 class="red-text">✨ Purchase blessing upgrades! ✨</h2>
   <div id="upgradeShop">
-    <button id="BtnA" class="btn-style">🕊️ Love Dove</button>
-    <button id="BtnB" class="btn-style">❤️‍🔥 Rapid Fire</button>
-    <button id="BtnC" class="btn-style">👼🎶 Cherub Choir</button>
+    <button id="BtnA" class="shop-btn-style"></button>
+    <button id="BtnB" class="shop-btn-style"></button>
+    <button id="BtnC" class="shop-btn-style"></button>
+    <div id="shopItems"></div>
   </div>
 
   <p id="itemSummary" class="red-text">Blessings Purchased: </p>
@@ -39,12 +58,16 @@ document.body.innerHTML = `
 
 `;
 
-// ==================== DOM ref ==================== //
+// ==================== DOM refer ==================== //
 const counterElement = document.getElementById("counter")!;
 const clickBtn = document.getElementById("clickBtn")!;
+
+// const shopItemsElement = document.getElementById("shopItems")!;
+
 const upgradeBtnA = document.getElementById("BtnA") as HTMLButtonElement;
 const upgradeBtnB = document.getElementById("BtnB") as HTMLButtonElement;
 const upgradeBtnC = document.getElementById("BtnC") as HTMLButtonElement;
+
 const itemSumElement = document.getElementById("itemSummary")!;
 const rateElement = document.getElementById("rate")!;
 
@@ -54,12 +77,20 @@ function currentCost(base: number, owned: number): number {
   return parseFloat(newCost.toFixed(2));
 }
 
+/* Replace currentCost with this after
+function calcNewCost(item: upgradeItems): number {
+  const newCost = base * Math.pow(PRICE_INCREASE, owned);
+  return parseFloat(newCost.toFixed(2));
+}
+*/
+
 function updateCounter() {
   counterElement.textContent = Math.floor(counter).toString();
   counterElement.title = counter.toFixed(5);
 }
 
-function updateItemSummary() {
+// updates rate info too
+function updateSummary() {
   rateElement.textContent = `Love Rate: ${growthRate.toFixed(2)} per second`;
 
   itemSumElement.textContent =
@@ -86,7 +117,7 @@ function updateButtons() {
 
 function refreshUI() {
   updateCounter();
-  updateItemSummary();
+  updateSummary();
   updateButtons();
 }
 
@@ -99,9 +130,7 @@ function autoClick(currentTime: number) {
   timeOfLastFrame = currentTime;
 
   counter += growthRate * deltaTime;
-  updateCounter();
-  updateItemSummary();
-  updateButtons();
+  refreshUI();
 
   requestAnimationFrame(autoClick);
 }
