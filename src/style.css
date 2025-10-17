@@ -25,7 +25,15 @@ body {
 
 .btn-style {
   background: #efaab0;
-  color: #be0822;
   size: 20px;
   padding: 16px;
+  border: 2px solid #e86975;
+  border-radius: 30px;
+  font-size: 18px;
+  color: #be0822;
+}
+
+button:disabled {
+  background: rgb(179, 160, 160);
+  color: #5e554f;
 }
