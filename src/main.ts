@@ -8,12 +8,13 @@ import "./style.css";
 import "./style.css";
 
 // ==================== Game State ==================== //
-let counter: number = 1110;
+let counter: number = 0;
 let growthRate: number = 0;
 const PRICE_INCREASE: number = 1.15;
 
 interface upgradeItems {
   name: string;
+  description: string;
   baseCost: number;
   rate: number;
   owned: number;
@@ -22,11 +23,41 @@ interface upgradeItems {
 
 // Step 9 refactor data structure
 const availableItems: upgradeItems[] = [
-  { name: "🕊️ Love Dove", baseCost: 10, rate: 0.1, owned: 0 },
-  { name: "❤️‍🔥 Rapid Fire", baseCost: 100, rate: 2.0, owned: 0 },
-  { name: "👼🎶 Cherub Choir", baseCost: 1000, rate: 50, owned: 0 },
-  //{name: "Upgrade 4",           baseCost: 5000,   rate: 200,  owned: 0},
-  //{name: "Upgrade 5",           baseCost: 20000,  rate: 1000, owned: 0}
+  {
+    name: "🕊️ Love Dove",
+    description: "Temporary description",
+    baseCost: 10,
+    rate: 0.1,
+    owned: 0,
+  },
+  {
+    name: "❤️‍🔥 Rapid Fire",
+    description: "Temporary description",
+    baseCost: 100,
+    rate: 2.0,
+    owned: 0,
+  },
+  {
+    name: "👼🎶 Cherub Choir",
+    description: "Temporary description",
+    baseCost: 1000,
+    rate: 50,
+    owned: 0,
+  },
+  {
+    name: "💘 Enchated Arrows",
+    description: "Temporary description",
+    baseCost: 10000,
+    rate: 200,
+    owned: 0,
+  },
+  {
+    name: "Test Your Luck",
+    description: "Temporary description",
+    baseCost: 20000,
+    rate: 1000,
+    owned: 0,
+  },
 ];
 
 // ==================== DOM ==================== //
@@ -113,6 +144,7 @@ function createShopBtns() {
 
     const btn = document.createElement("button");
     btn.type = "button";
+    btn.classList.add("shop-btn-style");
     btn.addEventListener("click", () => purchaseItem(item));
     item.button = btn;
 
