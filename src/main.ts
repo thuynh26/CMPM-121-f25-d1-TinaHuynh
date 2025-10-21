@@ -25,14 +25,14 @@ interface upgradeItems {
 const availableItems: upgradeItems[] = [
   {
     name: "🕊️ Love Dove",
-    description: "Temporary description",
+    description: "Doves help deliver more love arrows.",
     baseCost: 10,
     rate: 0.1,
     owned: 0,
   },
   {
     name: "❤️‍🔥 Rapid Fire",
-    description: "Temporary description",
+    description: "Pew pew",
     baseCost: 100,
     rate: 2.0,
     owned: 0,
@@ -72,6 +72,15 @@ document.body.innerHTML = `
     <div id="shopItems"></div>
   </div>
 
+  <div id="upgradeShop" class="shop-layout">
+    <div id="shopItems"></div>
+    <aside id="infoPanel" aria-live="polite">
+      <h3 class="red-text">📝 Upgrade Info</h3>
+      <div id="infoName" class="info-name"></div>
+      <div id="infoDesc" class="info-desc"></div>
+    </aside>
+  </div>
+
   <p id="itemSummary" class="red-text">Blessings Purchased: </p>
   <p id="rate" class="red-text">Love Rate: </p>
 
@@ -83,6 +92,14 @@ const clickBtn = document.getElementById("clickBtn")!;
 const shopElement = document.getElementById("shopItems")!;
 const itemSumElement = document.getElementById("itemSummary")!;
 const rateElement = document.getElementById("rate")!;
+
+const infoName = document.getElementById("infoName") as HTMLDivElement;
+const infoDesc = document.getElementById("infoDesc") as HTMLDivElement;
+
+function showInfo(item: upgradeItems) {
+  infoName.textContent = item.name;
+  infoDesc.textContent = item.description;
+}
 
 // ==================== Helper Functions ==================== //
 
@@ -145,12 +162,19 @@ function createShopBtns() {
     const btn = document.createElement("button");
     btn.type = "button";
     btn.classList.add("shop-btn-style");
-    btn.addEventListener("click", () => purchaseItem(item));
+    btn.addEventListener("click", () => {
+      purchaseItem(item);
+      showInfo(item);
+    });
     item.button = btn;
+
+    btn.addEventListener("mouseenter", () => showInfo(item));
+    btn.addEventListener("focus", () => showInfo(item));
 
     row.appendChild(btn);
     shopElement.appendChild(row);
   }
+  if (availableItems[0]) showInfo(availableItems[0]);
 
   updateButtons();
 }
