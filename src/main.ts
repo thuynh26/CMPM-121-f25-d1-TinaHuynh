@@ -10,7 +10,11 @@ import "./style.css";
 // ==================== Game State ==================== //
 let counter: number = 0;
 let growthRate: number = 0;
+let clickValue: number = 1; // for Encahted Arrows upgrade
+let clickBonusCounter: number = 0; // for Cupid's Aim upgrade
 const PRICE_INCREASE: number = 1.15;
+
+type itemType = "auto" | "click" | "clickBoost";
 
 interface upgradeItems {
   name: string;
@@ -18,6 +22,7 @@ interface upgradeItems {
   baseCost: number;
   rate: number;
   owned: number;
+  type: itemType;
   button?: HTMLButtonElement;
 }
 
@@ -25,38 +30,43 @@ interface upgradeItems {
 const availableItems: upgradeItems[] = [
   {
     name: "🕊️ Love Dove",
-    description: "Doves help deliver more love arrows.",
+    description: "A flock of tiny wingmen to help you spread love.",
     baseCost: 10,
     rate: 0.1,
     owned: 0,
-  },
-  {
-    name: "❤️‍🔥 Rapid Fire",
-    description: "Pew pew",
-    baseCost: 100,
-    rate: 2.0,
-    owned: 0,
-  },
-  {
-    name: "👼🎶 Cherub Choir",
-    description: "Temporary description",
-    baseCost: 1000,
-    rate: 50,
-    owned: 0,
+    type: "auto",
   },
   {
     name: "💘 Enchated Arrows",
-    description: "Temporary description",
-    baseCost: 10000,
-    rate: 200,
+    description: "Tip your arrows with magic, each shot lands harder.",
+    baseCost: 100,
+    rate: 0,
     owned: 0,
+    type: "click",
   },
   {
-    name: "Test Your Luck",
-    description: "Temporary description",
-    baseCost: 20000,
-    rate: 1000,
+    name: "🎯 Cupid's Aim",
+    description: "Every 5th shot lands true for extra hearts",
+    baseCost: 1000,
+    rate: 0,
     owned: 0,
+    type: "clickBoost",
+  },
+  {
+    name: "👼🎶 Cherub Choir",
+    description: "Enlist your cherub friends to sing love songs.",
+    baseCost: 10000,
+    rate: 50,
+    owned: 0,
+    type: "auto",
+  },
+  {
+    name: "❤️‍🔥 Rapid Fire",
+    description: "A quiver that shoots arrows at an incredible rate.",
+    baseCost: 20000,
+    rate: 100,
+    owned: 0,
+    type: "auto",
   },
 ];
 
@@ -74,15 +84,16 @@ document.body.innerHTML = `
 
   <div id="upgradeShop" class="shop-layout">
     <div id="shopItems"></div>
+    <br>
     <aside id="infoPanel" aria-live="polite">
-      <h3 class="red-text">📝 Upgrade Info</h3>
+      <h3 class="red-text">~~~~~~~~~~  Upgrade Info  ~~~~~~~~~~<h3>
       <div id="infoName" class="info-name"></div>
       <div id="infoDesc" class="info-desc"></div>
     </aside>
   </div>
 
-  <p id="itemSummary" class="red-text">Blessings Purchased: </p>
-  <p id="rate" class="red-text">Love Rate: </p>
+  <h3 id="itemSummary" class="red-text">Blessings Purchased: </h3>
+  <h3 id="rate" class="red-text">Love Rate: </h3>
 
 `;
 
@@ -95,11 +106,6 @@ const rateElement = document.getElementById("rate")!;
 
 const infoName = document.getElementById("infoName") as HTMLDivElement;
 const infoDesc = document.getElementById("infoDesc") as HTMLDivElement;
-
-function showInfo(item: upgradeItems) {
-  infoName.textContent = item.name;
-  infoDesc.textContent = item.description;
-}
 
 // ==================== Helper Functions ==================== //
 
@@ -118,11 +124,28 @@ function updateButtons() {
   for (const item of availableItems) {
     const price = calcNewCost(item);
     if (item.button) {
-      item.button.textContent =
-        `${item.name} (+${item.rate}/s) — Cost: ${price}`;
+      item.button.textContent = `${item.name} -- Cost: ${price}`;
       item.button.disabled = counter < price;
     }
   }
+}
+
+function showInfo(item: upgradeItems) {
+  const parts: string[] = [item.description];
+
+  if (item.type === "click") {
+    parts.push(`Increases click power by 1.`);
+  }
+  if (item.type === "clickBoost") {
+    const clickBonus = 1 + item.owned;
+    parts.push(`Every 5th click gives an extra ${clickBonus} love.`);
+  }
+  if (item.type === "auto") {
+    parts.push(`Generates ${item.rate} love per second.`);
+  }
+
+  infoName.textContent = item.name;
+  infoDesc.textContent = parts.join(" ");
 }
 
 function calcGrowthRate() {
@@ -137,7 +160,9 @@ function calcGrowthRate() {
 function updateSummary() {
   itemSumElement.textContent = `Blessings Purchased: 🕊️(${
     availableItems[0].owned
-  }) | ❤️‍🔥(${availableItems[1].owned}) | 👼🎶(${availableItems[2].owned})`;
+  }) | 💘(${availableItems[1].owned}) | 🎯(${availableItems[2].owned}) | 👼🎶(${
+    availableItems[3].owned
+  }) | ❤️‍🔥(${availableItems[4].owned})`;
 
   rateElement.textContent = `Love Rate: ${growthRate.toFixed(2)} per second`;
 }
@@ -148,9 +173,11 @@ function refreshUI() {
   calcGrowthRate();
   updateSummary();
 
+  /* For debugging
   console.log(
     `Counter: ${counter.toFixed(2)}, Growth Rate: ${growthRate.toFixed(2)}`,
   );
+  */
 }
 
 // ==================== Shop Button and Purchase Handler ====================//
@@ -186,6 +213,10 @@ function purchaseItem(item: upgradeItems) {
   counter -= cost;
   item.owned++;
 
+  if (item.type === "click") {
+    clickValue++;
+  }
+
   startLoopOnce();
   refreshUI();
 }
@@ -215,7 +246,15 @@ function startLoopOnce() {
 
 // ==================== Button Handlers ==================== //
 clickBtn.addEventListener("click", () => {
-  counter++;
+  counter = counter + clickValue;
+
+  if (availableItems[2].owned > 0) {
+    clickBonusCounter++;
+    if (clickBonusCounter % 5 === 0) {
+      counter = counter + (1 * availableItems[2].owned);
+    }
+  }
+
   refreshUI();
 });
 
