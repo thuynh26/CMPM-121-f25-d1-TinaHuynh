@@ -1,4 +1,6 @@
 import bowImage from "./cupid-bow.png";
+import shootSound from "./shoot.wav";
+
 import "./style.css";
 
 // ==================== Game State ==================== //
@@ -243,8 +245,21 @@ function startLoopOnce() {
   });
 }
 
+function playShoot() {
+  const a = new Audio(shootSound);
+  a.preload = "auto";
+  a.volume = 0.5;
+  a.currentTime = 0;
+  a.play();
+}
+
 // ==================== Button Handlers ==================== //
 bowImg.addEventListener("click", () => {
+  playShoot();
+  bowImg.classList.remove("shoot");
+  bowImg.offsetHeight;
+  bowImg.classList.add("shoot");
+
   counter = counter + clickValue;
 
   if (availableItems[2].owned > 0) {

@@ -37,6 +37,27 @@ body {
   transform: scale(1.08);
 }
 
+.bow-img.shoot {
+  animation: twang 220ms ease-in-out;
+}
+
+@keyframes twang {
+  0% {
+    transform: rotate(0deg) scale(1);
+    filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.12));
+  }
+  35% {
+    transform: rotate(-6deg) scale(0.98);
+    filter: drop-shadow(0 10px 16px rgba(0, 0, 0, 0.18));
+  }
+  70% {
+    transform: rotate(3deg) scale(1.02);
+  }
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+}
+
 .red-text {
   color: #be0822;
 }
