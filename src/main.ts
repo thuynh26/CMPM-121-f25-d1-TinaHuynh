@@ -14,7 +14,7 @@ let clickValue: number = 1; // for Encahted Arrows upgrade
 let clickBonusCounter: number = 0; // for Cupid's Aim upgrade
 const PRICE_INCREASE: number = 1.15;
 
-type itemType = "auto" | "click" | "clickBoost";
+type UpgradeType = "auto" | "click" | "clickBoost";
 
 interface upgradeItems {
   name: string;
@@ -22,7 +22,7 @@ interface upgradeItems {
   baseCost: number;
   rate: number;
   owned: number;
-  type: itemType;
+  type: UpgradeType;
   button?: HTMLButtonElement;
 }
 
