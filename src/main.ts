@@ -1,3 +1,5 @@
+// Added image to be used as main clicker button that was inspired by https://github.com/wendyzh05/D1 and https://github.com/t4ylo/cmpm-121-25-d1-taylorpearce
+// Added sound to be used on click that was inspired by https://github.com/InvinciblePyro/syhaw-website
 import bowImage from "./cupid-bow.png";
 import shootSound from "./shoot.wav";
 

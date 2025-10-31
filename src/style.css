@@ -7,18 +7,26 @@
 #fd9898 - pink
 */
 
-/* Start https://www.cursors-4u.com */
+/* Cursor from: https://www.cursors-4u.com */
 * {
   cursor:
     url(https://cur.cursors-4u.net/cursors/cur-10/cur918.cur),
     auto !important;
-} /* End https://www.cursors-4u.com */
+}
 
 body {
   margin-top: 40px;
   font-family: Elsie, serif;
   text-align: center;
-  background-color: #fff9f5;
+  background: #f5bfc5;
+  background: #f5bfc5;
+  background: linear-gradient(
+    322deg,
+    rgba(245, 191, 197, 1) 0%,
+    rgba(248, 204, 198, 1) 35%,
+    rgba(255, 240, 199, 1) 82%,
+    rgba(255, 222, 196, 1) 98%
+  );
 }
 
 .bow-container {
@@ -29,10 +37,11 @@ body {
 
 .bow-img {
   width: clamp(220px, 28vw, 360px);
-  filter: drop-shadow(0 6px 10px rgb(240, 173, 86));
+  filter: drop-shadow(0 6px 10px rgb(235, 137, 137));
   transition: transform 120ms ease, filter 120ms ease;
 }
 
+/* Bow img animations that was inspired by https://github.com/wendyzh05/D1*/
 .bow-img:hover {
   transform: scale(1.08);
 }
