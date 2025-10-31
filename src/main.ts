@@ -172,12 +172,6 @@ function refreshUI() {
   updateButtons();
   calcGrowthRate();
   updateSummary();
-
-  /* For debugging
-  console.log(
-    `Counter: ${counter.toFixed(2)}, Growth Rate: ${growthRate.toFixed(2)}`,
-  );
-  */
 }
 
 // ==================== Shop Button and Purchase Handler ====================//
