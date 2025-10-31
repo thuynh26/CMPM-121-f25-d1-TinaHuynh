@@ -10,9 +10,10 @@ import "./style.css";
 // ==================== Game State ==================== //
 let counter: number = 0;
 let growthRate: number = 0;
-let clickValue: number = 1; // for Encahted Arrows upgrade
-let clickBonusCounter: number = 0; // for Cupid's Aim upgrade
-const PRICE_INCREASE: number = 1.15;
+
+// Click upgrade: clickValue increases base click increment, clickBonusCounter enables a bonus every 5th click
+let clickValue: number = 1;
+let clickBonusCounter: number = 0;
 
 type UpgradeType = "auto" | "click" | "clickBoost";
 
@@ -109,7 +110,9 @@ const infoDesc = document.getElementById("infoDesc") as HTMLDivElement;
 
 // ==================== Helper Functions ==================== //
 
-// Replace calcCost with this after
+// Multiplier for exponential price increase
+const PRICE_INCREASE: number = 1.15;
+
 function calcNewCost(item: upgradeItems): number {
   const newCost = item.baseCost * Math.pow(PRICE_INCREASE, item.owned);
   return parseFloat(newCost.toFixed(2));
