@@ -7,11 +7,12 @@
 #fd9898 - pink
 */
 
-.icon {
-  width: 64px;
-  vertical-align: top;
-  border: 1px solid salmon;
-}
+/* Start https://www.cursors-4u.com */
+* {
+  cursor:
+    url(https://cur.cursors-4u.net/cursors/cur-10/cur918.cur),
+    auto !important;
+} /* End https://www.cursors-4u.com */
 
 body {
   margin-top: 40px;

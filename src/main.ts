@@ -1,10 +1,4 @@
-/*
-import exampleIconUrl from "./noun-paperclip-7598668-00449F.png";
-import "./style.css";
-
-<p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
-*/
-
+import bowImage from "./cupid-bow.png";
 import "./style.css";
 
 // ==================== Game State ==================== //
@@ -71,12 +65,20 @@ const availableItems: upgradeItems[] = [
   },
 ];
 
+/*
+<p>Example image asset: <img src="${exampleIconUrl}" class="icon" /></p>
+*/
+
 // ==================== DOM ==================== //
 document.body.innerHTML = `
   <h1 class="red-text">💞 Total Love Sent: <span id="counter">0</span></h1>
   <br>
-  <button id="clickBtn" class="main-btn-style">🏹 Shoot Love Arrow</button>
-  <p class="red-text">^ Click the button to send love arrows!</p>
+  <div class="bow-container">
+    <div class="bow-wrap">
+      <img id="bow" class="bow-img" src="${bowImage}">
+    </div>
+  </div>
+  <p class="red-text">^ Click to send love arrows!</p>
   <br>
   <h2 class="red-text">✨ Purchase blessing upgrades! ✨</h2>
   <div id="upgradeShop">
@@ -100,7 +102,7 @@ document.body.innerHTML = `
 
 // ==================== DOM refer ==================== //
 const counterElement = document.getElementById("counter")!;
-const clickBtn = document.getElementById("clickBtn")!;
+const bowImg = document.getElementById("bow") as HTMLImageElement;
 const shopElement = document.getElementById("shopItems")!;
 const itemSumElement = document.getElementById("itemSummary")!;
 const rateElement = document.getElementById("rate")!;
@@ -242,7 +244,7 @@ function startLoopOnce() {
 }
 
 // ==================== Button Handlers ==================== //
-clickBtn.addEventListener("click", () => {
+bowImg.addEventListener("click", () => {
   counter = counter + clickValue;
 
   if (availableItems[2].owned > 0) {
