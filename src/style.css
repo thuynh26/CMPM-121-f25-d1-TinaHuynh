@@ -20,6 +20,22 @@ body {
   background-color: #fff9f5;
 }
 
+.bow-container {
+  display: grid;
+  place-items: center;
+  margin: 10px 0 16px;
+}
+
+.bow-img {
+  width: clamp(220px, 28vw, 360px);
+  filter: drop-shadow(0 6px 10px rgb(240, 173, 86));
+  transition: transform 120ms ease, filter 120ms ease;
+}
+
+.bow-img:hover {
+  transform: scale(1.08);
+}
+
 .red-text {
   color: #be0822;
 }
